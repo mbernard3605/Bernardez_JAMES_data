@@ -1,0 +1,192 @@
+          Version 1 of CSU array-averaged analysis products (This is a not a final dataset). 
+
+          Release date: 7 August 2013
+
+          (Note: All versions released prior to this date from our CSU group should be referred to
+           as Version 0 which was based on a mixture of partially corrected hi-res sonde data 
+           and GTS-resolution uncorrected data.)
+
+          Array-averaged analysis included: 
+             - basic fields (z, u, v, omega, T, theta, q, rh, div, vort as a function of pressure) 
+             - large-scale forcing fields (i.e., advective tendencies of T and q) 
+             - Q1 and Q2 (i.e., apparent heat source and moisture sink)
+             - surface fluxes (latent and sensible heat, daily-resolution, from WHOI)
+             - budget-derived rainfall (based on Q2-budget)
+             - TRMM 3-hrly rainfall estimates (based on 3B42v7 product)
+
+          Time period: 1 October - 31 Decemeber 2011,  6-hr resolution unless noted otherwise
+
+          Vertical resolution: 25-hPa
+
+          Averaging areas: 
+             - Northern Sounding Array (NSA) bounded by core sites (Male, Colombo, Gan, Revelle) 
+             - Southern Sounding Array (SSA) bounded by core sites (Mirai, Gan, Diego, Revelle) 
+             - Figure "dynamo_map.png" shows averaging array and sonde network 
+
+This dataset version used no supplemental model data in data sparse regions 
+               (i.e., neither inside nor outside of enhanced sounding arrays).  
+             - hi-res sonde data was used at the following core sites (Male, Gan, Diego, Revelle, 
+               Mirai, Colombo) and 12 other Piority Sounding Sites (See Ciesielski et al. 2013)
+             - humidity corrected (Level 3) data were used for the six core sites, however 
+               humidity corrections were not yet available for the 12 Meisei sonde sites 
+               over Indonesia at the time this version of the dataset was prepared. 
+             - hi-res P3 dropsonde data were used
+             - GTS-resolution sonde data were used at 54 other sites
+             - V1 analyses are available every 6 hours, future versions will be created at 3 hr resolution
+             - Ciesielski et al. (2013) describes the sonde data used and their corrections  
+             - Johnson and Ciesielski (2013) describes analysis procedure and some preliminary findings
+
+             - caveats:  Because of the large station spacing between sites over the Northern 
+                         Sounding Array, the strong diurnal cycle and flow-blocking at low-levels 
+                         at Colombo are aliased onto the large-scale analyses and adversely affect 
+                         the large-scale budgets. This version of the analysis includes a preliminary 
+                         attempt to adjust low-level fields in Colombo sonde data to mute these effects. 
+                         This is a work in progress and details of this adjustment and its 
+                         impact on the budgets are forthcoming. 
+                        -while analyses are provide from 1 Oct to 31 Dec, keep in mind the following:
+                         - analyses are most reliable when ships are on-site:
+                           - Revelle was onsite (nominal position 80.5E,Eq.) from 4 Oct - 29 Oct, 
+                             10 Nov. - 04 Dec., and 18 Dec. - 31 Dec.
+                           - Mirai was on site (nominal position 80.5E,8S) from 1 Oct - 24 Oct. 
+                             and 1 Nov - 27 Nov. 
+                         - analyses over NSA are less reliable after 12/05 when Colombo went from
+                           4/day to 1/day sonde observations.
+                         - Male' ended sonde operation on 15 December 2011 at 00Z so in effect there 
+                           was no NSA after this date.
+                         - see figure "invent_vis.png" which shows a visual inventory of soundings for 6 core 
+                           Indian Ocean sites (Fig. 2 of Ciesielski et al. 2013) 
+
+              - (for internal use only: V1 analyses is based on gridded analysis version 8a)
+
+These data products were created by objectively analyzing upper-air sonde data onto a regular 1-degree, 
+25-hPa grid using multiquadric interpolation.  The gridded data fields were then averaged over the 
+Northern Sounding Array (NSA) and Southern Sounding Arrays (SSA). As discussed in Johnson and Ciesielski 2013
+the NSA analyses were strongly modulated by MJO signal while SSA analyses were modulated more by ITCZ convection. 
+
+Reference for datasets (pdf for papers below are located on this directory): 
+
+   Johnson, R. H., and P. E. Ciesielski, 2013: 
+       Structure and properties of Madden-Julian Oscillations deduced from DYNAMO sounding arrays. 
+       J. Atmos. Sci., (in press). 
+
+   Ciesielski, P. E. and coauthors, 2013: Quality-controlled Upper-Air Sounding Dataset for 
+       DYNAMO/CINDY/AMIE: Development and Corrections (submitted to JTECH).
+
+Register to obtain future versions:
+
+Once the sounding quality-control and corrections are complete, an updated version of these analyses 
+will be created. If you wish to register your use of the dataset (by sending an email to:
+ paulc@atmos.colostate.edu), you will be notified when future updates become available. 
+
+Problems or questions should be referred to Paul Ciesielski at: paulc@atmos.colostate.edu
+
+
+******** format for fields.nsa_ver or fields.ssa_ver: BASIC fields
+
+for each 6 hour period there is one line with date/time information followed by 
+41 lines with data as a function of pressure
+
+order of fields and their units are given below
+
+ yy mm dd hh
+    p          z        u        v      omega     T       theta     wmr     rh        div      vort
+    hPa        m       m/s       m/s     mb/hr    C        K        g/kg     (%)     x10^6s-1  x10^5s-1
+
+
+to convert omega (mb/hr) to w (mm/s) use the following approximate eqn: omega/(-g*rho) = w 
+
+g = 9.8 m/s
+rho = p/RT can be computed from fields provided (for example near 1000 mb, rho  ~ 1.15 kg/m^3, 
+                                                             near  100 mb, rho  ~ 0.18 kg/m^3)
+
+So that 1 mb/hr is ~2.5 mm/s  near 1000 mb, while 1 mb/hr near 100 mb is ~16 mm/s 
+
+
+******* format for lsf.nsa_ver or lsa.ssa_ver: LARGE-SCALE FORCING fields
+
+File "lsf.nsa_ver" contains 368 periods of six-hourly forcing data (01 Oct - 31 Dec 2011).
+For each six hour period there are 41 lines of data.
+
+Line 1 contains: [year, month, day, hour]
+                 written with format (4i3)
+Lines 2-42 contain: [p(mb), hT(C/s), vT(C/s), hq(gr/(kg*s)), vq(gr/(kg*s))]
+                          written with format (f8.2,1p,8e11.3)
+                          where hT - horizontal advection of T
+                          where vT -   vertical advection of T
+                          where hq - horizontal advection of q
+                          where vq -   vertical advection of q
+
+These horizontal and vertical advection terms were computed using centered differences as follows:
+
+horizontal advection of "f": h(f) = u*df/dx + v*df/dy
+                      where: dx = a cos(phi)*d(lambda)
+                             dy = a d(phi)
+                             phi    - latitiude
+                             lambda - longitude
+vertical advection of "f": v(f) = omega*df/dp
+
+Note: vt is only part of vertical temperture forcing (vtf)
+      vtp = (p/po)**cappa * omega * d(theta)/dp = omega * (dT/dp - alpha/cp),  
+                                                 where alpha is specific volume
+      alpha = RT/p can be computed from basic fields
+
+
+******* format for q1q2.nsa_ver or q1q2.ssa_ver: ARRAY-AVERAGED Q1 and Q2 
+
+File "q1q2.nsa_ver" contains 368 periods of six-hourly data. 
+For each six hour period there are 41 lines of data.
+
+Line 1 contains: [year, month, day, hour]
+                  written with format (4i3)
+Lines 2-42 contain: [p(mb), Q1 (K/day), Q2(K/day)]
+                  written with format (f7.1,1x,2f8.2)
+The apparent heat source, Q1, and moisture sink, Q2 (Yanai et al. 1973)
+were computed as:
+
+Q1/cp = [dT/dt + h(T) + (p/po)**kappa * omega * d(theta)/dp]
+Q2/cp = -Lv/cp * [dq/dt + h(q) + v(q)]
+      where dt = 12 hours
+            po = 1000 mb
+            cp = 1004
+            Lv = 2.5e6
+             g = 9.8
+
+
+********* format for nsa.dfluxes or ssa.dfluxes: ARRAY-AVERAGED SURFACE FLUXES
+
+daily fluxes and surface fields from WHOI OAFlux product
+
+  np - number of points in averaging area
+
+  yr    mn   dy    lh       sh      ws      ta      qa     sst    np
+                  W/m^2    W/m^2    m/s     C      g/kg     C
+
+
+******** format for eopo.nsa_ver or eopo.ssa_ver: BUDGET-DERIVED RAINFALL 
+
+eo - comes from WHOI OAFlux product averaged over nsa
+   - note 100 W/m^2 = 3.45 mm/day
+po - Q2-budget derived rainfall using eo estimate
+
+  yr    mn   dy   hr    eo     po
+                       mm/day  mm/day
+
+
+******** format for trmm_rain: TRMM RAINFALL OVER VARIOUS REGIONS 
+
+trmm 3b42V7 area averaged rainfall in mm/day
+
+   e.g., nsa - over northern enhanced sounding array
+         ssa - over southern enhanced sounding array
+         colombo - area with 1 degree radius centered on colombo
+         gan     - area with 1 degree radius centered on colombo
+         revelle - area with 1 degree radius centered on colombo
+         diego   - area with 1 degree radius centered on colombo
+         mirai   - area with 1 degree radius centered on colombo
+         manus   - area with 1 degree radius centered on colombo
+
+         np      - number of 0.25 degree points in averaging area
+
+yymmddhh nsa ssa colombo  male  gan revelle diego mirai manus (np(i),i=1,9)
+
+last line of file gives temporal mean for each area  
